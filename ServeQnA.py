@@ -2,7 +2,7 @@ import socket
 import threading
 
 HEADER = 64
-PORT = 5678
+PORT = 8763
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
@@ -28,8 +28,8 @@ def handle_client1(conn1, addr1, conn2, addr2):  # recives question from client 
             answer_length = conn2.recv(HEADER).decode(FORMAT)
 
             if answer_length:
-                answer_length = int(msg_length)
-                answer = conn2.recv(msg_length).decode(FORMAT)
+                answer_length = int(answer_length)
+                answer = conn2.recv(answer_length).decode(FORMAT)
                 print(f"[{addr2}]{answer}")
                 if question == DISCONNECT_MESSAGE:
                     break
@@ -37,6 +37,7 @@ def handle_client1(conn1, addr1, conn2, addr2):  # recives question from client 
 
     conn1.close()
     conn2.close()
+    # socket.close()
 
 
 
@@ -44,13 +45,9 @@ def start():
     server.listen()
     print(f"server is listening on {SERVER}")
     # while True:
-    #     conn, addr = server.accept()
-    #     thread = threading.Thread(target=handle_client1, args=(conn, addr))
-    #     thread.start()
-    #     print(f"[ACTIVE CONNECTIONS]{threading.activeCount() - 1}")
-    conn1, addr1 = server.accept()  # receives quesion
     conn2, addr2 = server.accept()  # send answer to this
-    # handle_client1(conn1, addr1, conn2, addr2)
+    conn1, addr1 = server.accept()  # receives quesion
+
     thread = threading.Thread(target=handle_client1, args=(conn1, addr1, conn2, addr2))
     thread.start()
     print(f"[ACTIVE CONNECTIONS]{threading.activeCount() - 1}")
