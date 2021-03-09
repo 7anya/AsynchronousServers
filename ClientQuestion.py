@@ -1,8 +1,7 @@
-
 import socket  # Import socket module
 
 HEADER = 64
-PORT = 5678
+PORT = 8763
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "disconnect"
 SERVER = "127.0.1.1"
@@ -21,6 +20,6 @@ def send(msg):
     print(client.recv(2048).decode(FORMAT))
 
 
-send("1")
-# send("HELLO TAN")
-# send(DISCONNECT_MESSAGE)
+while True:
+    question = input("Enter a question 1,2 3\n")
+    send(question)
