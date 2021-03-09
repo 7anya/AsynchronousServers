@@ -40,17 +40,16 @@ def handle_client1(conn1, addr1, conn2, addr2):  # recives question from client 
     # socket.close()
 
 
-
 def start():
     server.listen()
     print(f"server is listening on {SERVER}")
-    # while True:
-    conn2, addr2 = server.accept()  # send answer to this
-    conn1, addr1 = server.accept()  # receives quesion
+    conn2, addr2 = server.accept()  # answer client
+    while True:
+        conn1, addr1 = server.accept()  # receives quesion from question client
+        thread = threading.Thread(target=handle_client1, args=(conn1, addr1, conn2, addr2))
+        thread.start()
+        print(f"[ACTIVE CONNECTIONS]{threading.activeCount() - 1}")
 
-    thread = threading.Thread(target=handle_client1, args=(conn1, addr1, conn2, addr2))
-    thread.start()
-    print(f"[ACTIVE CONNECTIONS]{threading.activeCount() - 1}")
 
 print("[STARTING] server is starting....")
 start()
